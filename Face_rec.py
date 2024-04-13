@@ -4,6 +4,7 @@ import cv2
 import os
 import redis
 
+
 ##insight face
 from insightface.app import FaceAnalysis
 from sklearn.metrics import pairwise
@@ -12,6 +13,12 @@ from datetime import datetime
 
 ## connect to Redis client
 
+## connect to Redis client
+## redis-17573.c325.us-east-1-4.ec2.cloud.redislabs.com:17573
+# WXDebDS3c7Tkvhi3V5eRRKEMr70RpK5k
+hostname = 'redis-17573.c325.us-east-1-4.ec2.cloud.redislabs.com'
+password = 'WXDebDS3c7Tkvhi3V5eRRKEMr70RpK5k'
+portnumber = 17573
 
 
 r = redis.StrictRedis(host = hostname,
@@ -142,59 +149,59 @@ class RealTimePred:
         return test_copy
                         
 ## Get results from insightface model
-class RegistrationForm:
-    def __init__(self):
-        self.sample = 0
-    def reset(self):
-        self.sample = 0  
-    def get_embeddings(self,frame):
-        results = faceapp.get(frame,max_num=1) 
-        embeddings = None
-        for res in results:
-            self.sample += 1
-            x1,y1,x2,y2 = res['bbox'].astype(int)
-            cv2.rectangle(frame,(x1,y1),(x2,y2),(0,255,0),1)
-            #Put sample info
-            text = f"Samples={self.sample}"
-            cv2.putText(frame,text,(x1,y1),cv2.FONT_HERSHEY_DUPLEX,0.6,(255,255,0),2)
-            # Facial Features
-            embeddings = res['embedding']  
+# class RegistrationForm:
+#     def __init__(self):
+#         self.sample = 0
+#     def reset(self):
+#         self.sample = 0  
+#     def get_embeddings(self,frame):
+#         results = faceapp.get(frame,max_num=1) 
+#         embeddings = None
+#         for res in results:
+#             self.sample += 1
+#             x1,y1,x2,y2 = res['bbox'].astype(int)
+#             cv2.rectangle(frame,(x1,y1),(x2,y2),(0,255,0),1)
+#             #Put sample info
+#             text = f"Samples={self.sample}"
+#             cv2.putText(frame,text,(x1,y1),cv2.FONT_HERSHEY_DUPLEX,0.6,(255,255,0),2)
+#             # Facial Features
+#             embeddings = res['embedding']  
             
-        return frame, embeddings
+#         return frame, embeddings
     
-    def save_data_in_redis_db(self,name,role):
-        # validation name
-        if name is not None:
-            if name.strip() != '':
-                key = f'{name}@{role}'
-            else:
-                return 'name_false'
-        else:
-            return 'name_false'
+#     def save_data_in_redis_db(self,name,role):
+#         # validation name
+#         if name is not None:
+#             if name.strip() != '':
+#                 key = f'{name}@{role}'
+#             else:
+#                 return 'name_false'
+#         else:
+#             return 'name_false'
         
-        # if face_embedding.txt exists
-        if 'face_embedding.txt' not in os.listdir():
-            return 'file_false'
+#         # if face_embedding.txt exists
+#         if 'face_embedding.txt' not in os.listdir():
+#             return 'file_false'
         
         
-        # step-1: load "face_embedding.txt"
-        x_array = np.loadtxt('face_embedding.txt',dtype=np.float32) # flatten array            
+#         # step-1: load "face_embedding.txt"
+#         x_array = np.loadtxt('face_embedding.txt',dtype=np.float32) # flatten array            
         
-        # step-2: convert into array (proper shape)
-        received_samples = int(x_array.size/512)
-        x_array = x_array.reshape(received_samples,512)
-        x_array = np.asarray(x_array)       
+#         # step-2: convert into array (proper shape)
+#         received_samples = int(x_array.size/512)
+#         x_array = x_array.reshape(received_samples,512)
+#         x_array = np.asarray(x_array)       
         
-        # step-3: cal. mean embeddings
-        x_mean = x_array.mean(axis=0)
-        x_mean_bytes = x_mean.tobytes()
+#         # step-3: cal. mean embeddings
+#         x_mean = x_array.mean(axis=0)
+#         x_mean_bytes = x_mean.tobytes()
         
-        # step-4: save this into redis database
-        # redis hashes
-        r.hset(name='academy:register',key=key,value=x_mean_bytes)
+#         # step-4: save this into redis database
+#         # redis hashes
+#         r.hset(name='academy:register',key=key,value=x_mean_bytes)
         
-        # 
-        os.remove('face_embedding.txt')
-        self.reset()
+#         # 
+#         os.remove('face_embedding.txt')
+#         self.reset()
         
-        return True
+#         return True
