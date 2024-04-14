@@ -33,6 +33,16 @@ Install additional dependencies as mentioned in the project documentation.
 
 To get started with the project, clone this repository to your local machine:
 
-```bash
-git clone https://github.com/your-username/face-recognition-attendance-system.git
+ ```bash
+ git clone https://github.com/your-username/face-recognition-attendance-system.git
+
+```
+
+## Usage
+
+1. Navigate to the cloned repository and follow the instructions provided in each module's directory to understand and execute the code.
+2. Run the registration form to add new person data to the system.
+3. Start the face recognition system for attendance tracking.
+4. Access the web application interface using Streamlit for convenient management.
+5. Generate reports based on attendance data as needed.
 
