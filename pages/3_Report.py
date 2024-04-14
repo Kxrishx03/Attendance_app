@@ -1,7 +1,7 @@
 import streamlit as st
 from Home import Face_rec
 import pandas as pd
-#st.set_page_config(page_title='Report')
+
 st.subheader('Reporting')
 
 #Retrive & show logs data
@@ -95,7 +95,3 @@ with tab3:
     date_name_role_zip_df['Status'] =date_name_role_zip_df['Duration_hours'].apply(status_marker)
 
     st.dataframe(date_name_role_zip_df)
-
-
-
-    
